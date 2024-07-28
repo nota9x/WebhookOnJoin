@@ -31,12 +31,13 @@ inputTypeEvent.Name = "InputTypeEvent"
 local WEBHOOK_URL = "WEBHOOK_URL_HERE"
 local IP_API_URL = "https://api.ipgeolocation.io/ipgeo?apiKey=API_KEY_HERE"
 
--- Error messages
+-- Potential error messages
 local ERROR_FETCHING_REGION = "[getServerRegion] Error fetching server region: "
 local ERROR_CONVERTING_FLAG = "[convertFlagToEmoji] Error: "
 local ERROR_MISSING_DATA = "[getServerRegion] Missing data in API response"
 local ERROR_SENDING_WEBHOOK = "[sendWebhookMessage] Error: "
 local ERROR_WEBHOOK_URL_MISSING = "[sendWebhookMessage] Webhook URL is not set."
+local ERROR_API_KEY_MISSING = "[getServerRegion] API key is missing or invalid."
 
 -- Abbreviation mappings
 local stateAbbreviations = {
@@ -58,7 +59,7 @@ local stateAbbreviations = {
     -- Add additional abbreviations if necessary
 }
 
--- Function to send a webhook message
+-- Fire webhook message
 local function sendWebhookMessage(player, inputType, serverRegion, ping, gameName, gameLink)
     if WEBHOOK_URL == "" or WEBHOOK_URL == "WEBHOOK_URL_HERE" then
         warn(ERROR_WEBHOOK_URL_MISSING)
@@ -92,9 +93,9 @@ local function sendWebhookMessage(player, inputType, serverRegion, ping, gameNam
     end
 end
 
--- Function to get server region
+-- Get server region
 local function getServerRegion()
-    -- Nested function to convert flag URL to Discord emoji code
+    -- Convert flag URL to Discord emoji code
     local function convertFlagToEmoji(flagUrl)
         local success, result = pcall(function()
             local countryCode = string.match(flagUrl, "flags/(%a+)_64.png")
@@ -110,6 +111,11 @@ local function getServerRegion()
         end
 
         return result
+    end
+   
+    if IP_API_URL == "" or IP_API_URL == "API_KEY_HERE" then
+        warn(ERROR_API_KEY_MISSING)
+        return "Unknown"
     end
 
     local success, asyncInfo = pcall(function()
