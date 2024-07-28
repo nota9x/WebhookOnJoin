@@ -95,7 +95,7 @@ end
 
 -- Get server region
 local function getServerRegion()
-    -- Convert flag URL to Discord emoji code
+    -- Convert flag image URL to Discord emoji
     local function convertFlagToEmoji(flagUrl)
         local success, result = pcall(function()
             local countryCode = string.match(flagUrl, "flags/(%a+)_64.png")
@@ -113,10 +113,10 @@ local function getServerRegion()
         return result
     end
    
-    if IP_API_URL == "" or IP_API_URL == "API_KEY_HERE" then
+    if IP_API_URL == "" or string.find(IP_API_URL, "API_KEY_HERE") then
         warn(ERROR_API_KEY_MISSING)
         return "Unknown"
-    end
+    end    
 
     local success, asyncInfo = pcall(function()
         return HttpService:GetAsync(IP_API_URL)
