@@ -36,6 +36,7 @@ local ERROR_FETCHING_REGION = "[getServerRegion] Error fetching server region: "
 local ERROR_CONVERTING_FLAG = "[convertFlagToEmoji] Error: "
 local ERROR_MISSING_DATA = "[getServerRegion] Missing data in API response"
 local ERROR_SENDING_WEBHOOK = "[sendWebhookMessage] Error: "
+local ERROR_WEBHOOK_URL_MISSING = "[sendWebhookMessage] Webhook URL is not set."
 
 -- Abbreviation mappings
 local stateAbbreviations = {
@@ -59,8 +60,8 @@ local stateAbbreviations = {
 
 -- Function to send a webhook message
 local function sendWebhookMessage(player, inputType, serverRegion, ping, gameName, gameLink)
-    if WEBHOOK_URL == "" then
-        warn("[sendWebhookMessage] Webhook URL is not set.")
+    if WEBHOOK_URL == "" or WEBHOOK_URL == "WEBHOOK_URL_HERE" then
+        warn(ERROR_WEBHOOK_URL_MISSING)
         return
     end
 
