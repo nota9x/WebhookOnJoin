@@ -37,7 +37,7 @@ local ERROR_CONVERTING_FLAG = "[convertFlagToEmoji] Error: "
 local ERROR_MISSING_DATA = "[getServerRegion] Missing data in API response"
 local ERROR_SENDING_WEBHOOK = "[sendWebhookMessage] Error: "
 local ERROR_WEBHOOK_URL_MISSING = "[sendWebhookMessage] Webhook URL is not set."
-local ERROR_API_KEY_MISSING = "[getServerRegion] API key is missing or invalid."
+local ERROR_API_KEY_MISSING = "[getServerRegion] API key is missing or API URL is blank."
 
 -- Abbreviation mappings
 local stateAbbreviations = {
@@ -116,7 +116,7 @@ local function getServerRegion()
     if IP_API_URL == "" or string.find(IP_API_URL, "API_KEY_HERE") then
         warn(ERROR_API_KEY_MISSING)
         return "Unknown"
-    end    
+    end
 
     local success, asyncInfo = pcall(function()
         return HttpService:GetAsync(IP_API_URL)
