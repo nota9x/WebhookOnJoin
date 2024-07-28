@@ -28,8 +28,9 @@ local inputTypeEvent = ReplicatedStorage:FindFirstChild("InputTypeEvent") or Ins
 inputTypeEvent.Name = "InputTypeEvent"
 
 -- Constants
-local WEBHOOK_URL = "WEBHOOK_URL_HERE"
-local IP_API_URL = "https://api.ipgeolocation.io/ipgeo?apiKey=API_KEY_HERE"
+local WEBHOOK_URL = HttpService:GetSecret("webhook_url")
+local IP_API_KEY = HttpService:GetSecret("ip_api_key")
+local IP_API_URL_PREFIX = "https://api.ipgeolocation.io/ipgeo?apiKey="
 
 -- Potential error messages
 local ERROR_FETCHING_REGION = "[getServerRegion] Error fetching server region: "
@@ -113,6 +114,8 @@ local function getServerRegion()
         return result
     end
    
+    local IP_API_URL = IP_API_KEY:AddPrefix(IP_API_URL_PREFIX)
+
     if IP_API_URL == "" or string.find(IP_API_URL, "API_KEY_HERE") then
         warn(ERROR_API_KEY_MISSING)
         return "Unknown"
