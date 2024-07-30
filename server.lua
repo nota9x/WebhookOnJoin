@@ -28,9 +28,9 @@ local inputTypeEvent = ReplicatedStorage:FindFirstChild("InputTypeEvent") or Ins
 inputTypeEvent.Name = "InputTypeEvent"
 
 -- Constants
+local IP_API_URL_PREFIX = "https://api.ipgeolocation.io/ipgeo?apiKey=" -- Make sure to remove flag logic if using another API
 local WEBHOOK_URL = HttpService:GetSecret("webhook_url")
-local IP_API_KEY = HttpService:GetSecret("ip_api_key")
-local IP_API_URL_PREFIX = "https://api.ipgeolocation.io/ipgeo?apiKey="
+local IP_API_KEY = HttpService:GetSecret("ip_api_key") -- Leave blank if unused
 
 -- Potential error messages
 local ERROR_FETCHING_REGION = "[getServerRegion] Error fetching server region: "
@@ -38,7 +38,7 @@ local ERROR_CONVERTING_FLAG = "[convertFlagToEmoji] Error: "
 local ERROR_MISSING_DATA = "[getServerRegion] Missing data in API response"
 local ERROR_SENDING_WEBHOOK = "[sendWebhookMessage] Error: "
 local ERROR_WEBHOOK_URL_MISSING = "[sendWebhookMessage] Webhook URL is not set."
-local ERROR_API_KEY_MISSING = "[getServerRegion] API key is missing or API URL is blank."
+local ERROR_API_KEY_MISSING = "[getServerRegion] API key for serer region lookups is missing."
 
 -- Abbreviation mappings
 local stateAbbreviations = {
@@ -72,8 +72,8 @@ local function sendWebhookMessage(player, inputType, serverRegion, ping, gameNam
     local userId = player.UserId
 
     local embed = {
-        title = "New player joined the game",
-        description = "A new player has joined " .. gameName .. "!",
+        title = "Join Event",
+        description = "A player has joined " .. gameName .. "!",
         fields = {
             {name = "Name", value = "[" .. displayName .. "](https://www.roblox.com/users/" .. tostring(userId) .. "/profile) (@" .. username .. ")", inline = true},
             {name = "User ID", value = userId, inline = true},
@@ -116,7 +116,7 @@ local function getServerRegion()
    
     local IP_API_URL = IP_API_KEY:AddPrefix(IP_API_URL_PREFIX)
 
-    if IP_API_URL == "" or string.find(IP_API_URL, "API_KEY_HERE") then
+    if string.find(IP_API_URL, "API_KEY_HERE") then
         warn(ERROR_API_KEY_MISSING)
         return "Unknown"
     end
